@@ -14,6 +14,8 @@ export default class Gameplay extends _State {
     this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
 
+    this.mexican = Actors.mexican(this.game, WIDTH/2, 16, this.world);
+    this.mexican.moveTimer();
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.brickCannon = Groups.brickCannon(this.game);
     this.game.add.existing(this.brickCannon);
@@ -90,6 +92,8 @@ export default class Gameplay extends _State {
     otherWall.body.immovable = true;
   }
 
+
+
   update () {
     this.game.physics.arcade.collide(this.brickCannon, this.brickCannon, this.onBrickCollision);
     this.game.physics.arcade.collide(this.brickCannon, this.walls, this.onBrickCollision);
@@ -101,6 +105,8 @@ export default class Gameplay extends _State {
     if (this.input.keyboard.isDown(Phaser.Keyboard.O)) {
       this.player.destroy();
     }
+
+
 
     this.player.update();
   }

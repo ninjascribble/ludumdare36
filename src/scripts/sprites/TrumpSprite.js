@@ -18,6 +18,5 @@ export default class trumpSprite extends _Sprite {
     this.animations.add('explode', [6, 7, 8], 12, false);
     this.animations.play('normal');
     this.anchor.setTo(0.5, 1);
-    //this.game.add.tween(this.trump.body).to( {x:this.trump.x-16}, 500, Phaser.Easing.Linear.None, true);
   }
 }

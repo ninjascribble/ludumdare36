@@ -34,7 +34,9 @@ export default class Gameplay extends _State {
 
     const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
     wKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
+      if (!this.isBrickAt(this.player.sprite.location)) {
+        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
+      }
     });
 
     const sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -56,7 +58,6 @@ export default class Gameplay extends _State {
   buildBoundryWalls () {
     let x = 0;
     let y = 0;
-    this.walls = this.game.add.group();
 
     while (x < WIDTH) {
       const leftBrick = Sprites.brick(this.game, x, 0);
@@ -64,8 +65,8 @@ export default class Gameplay extends _State {
       leftBrick.body.immovable = true;
       rightBrick.body.immovable = true;
 
-      this.walls.add(leftBrick);
-      this.walls.add(rightBrick);
+      this.brickCannon.add(leftBrick);
+      this.brickCannon.add(rightBrick);
       x += 16;
     }
 
@@ -75,8 +76,8 @@ export default class Gameplay extends _State {
       topBrick.body.immovable = true;
       bottomBrick.body.immovable = true;
 
-      this.walls.add(topBrick);
-      this.walls.add(bottomBrick);
+      this.brickCannon.add(topBrick);
+      this.brickCannon.add(bottomBrick);
       y += 16;
     }
   }
@@ -90,18 +91,18 @@ export default class Gameplay extends _State {
     otherWall.body.immovable = true;
   }
 
+  isBrickAt (location) {
+    this.brickCannon.children.forEach((brick) => {
+      if (location.x > brick.bounds.left && location.x < brick.bounds.right && location.y > brick.bounds.top && location.y < brick.bounds.bottom) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
   update () {
     this.game.physics.arcade.collide(this.brickCannon, this.brickCannon, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.brickCannon, this.walls, this.onBrickCollision);
-
-    if (this.input.keyboard.isDown(Phaser.Keyboard.Q)) {
-      this.player.respawn(this.game.world.centerX, this.player.sprite.y);
-    }
-
-    if (this.input.keyboard.isDown(Phaser.Keyboard.O)) {
-      this.player.destroy();
-    }
-
-    this.player.update();
+    this.game.physics.arcade.collide(this.brickCannon, this.player.sprite, this.onBrickCollision);
   }
 }

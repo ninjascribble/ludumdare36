@@ -2,10 +2,13 @@ import _State from './_State';
 import Actors from '../actors';
 import Fonts from '../fonts';
 import Groups from '../groups';
+import Sprites from '../sprites';
 
 export default class Gameplay extends _State {
   create () {
     this.world.setBounds(0, 0, 1400, 1400);
+    this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
+    this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
     this.player = Actors.player(this.game, this.world.centerX, 60, this.world);
     this.brickCannon = Groups.brickCannon(this.game);

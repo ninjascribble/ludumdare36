@@ -26,22 +26,22 @@ export default class Gameplay extends _State {
 
     let wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
     wKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.ship.position, this.brickCannon.direction.up);
+      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.up);
     });
 
     let sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
     sKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.ship.position, this.brickCannon.direction.down);
+      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.down);
     });
 
     let aKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
     aKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.ship.position, this.brickCannon.direction.left);
+      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.left);
     });
 
     let dKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
     dKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.ship.position, this.brickCannon.direction.right);
+      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.right);
     });
   }
 

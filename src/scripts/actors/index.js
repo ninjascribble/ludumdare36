@@ -7,7 +7,7 @@ module.exports = {
     var player = new Player(game, trump);
 
     if (group) {
-      group.add(player.trump);
+      group.add(player.sprite);
     }
 
     return player;

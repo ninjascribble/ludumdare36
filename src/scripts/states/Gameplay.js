@@ -13,10 +13,11 @@ export default class Gameplay extends _State {
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
+
     this.player = Actors.player(this.game, this.world.centerX + 8, this.world.centerY, this.world);
     this.brickCannon = Groups.brickCannon(this.game);
     this.game.add.existing(this.brickCannon);
-    this.camera.follow(this.player.trump, Phaser.Camera.FOLLOW_LOCKON);
+    this.camera.follow(this.player.sprite, Phaser.Camera.FOLLOW_LOCKON);
     this.buildBoundryWalls();
 
     const leftKey = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -33,22 +34,22 @@ export default class Gameplay extends _State {
 
     const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
     wKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.up);
+      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
     });
 
     const sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
     sKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.down);
+      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.down);
     });
 
     const aKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
     aKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.left);
+      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.left);
     });
 
     const dKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
     dKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.trump.position, this.brickCannon.direction.right);
+      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.right);
     });
   }
 
@@ -94,7 +95,7 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.brickCannon, this.walls, this.onBrickCollision);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.Q)) {
-      this.player.respawn(this.game.world.centerX, this.player.trump.y);
+      this.player.respawn(this.game.world.centerX, this.player.sprite.y);
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.O)) {

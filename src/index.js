@@ -1,4 +1,4 @@
-import States from './states';
+import States from './scripts/states';
 
 const width = 192;
 const height = 120;

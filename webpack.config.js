@@ -4,11 +4,11 @@ var CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.join(__dirname, 'src'),
-  entry: './scripts/index',
+  entry: './index',
   devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'scripts/game.js',
+    filename: path.join('scripts/game.js'),
     sourceMapFilename: '[file].map'
   },
   module: {
@@ -20,12 +20,12 @@ module.exports = {
   plugins: [
     new CleanPlugin(['build']),
     new CopyPlugin([{
-      from: './static'
+      from: path.join('./static')
     }, {
-      from: './assets',
+      from: path.join('./assets'),
       to: 'assets'
     }, {
-      from: '../node_modules/phaser/build',
+      from: path.join('../node_modules/phaser/build'),
       to: 'scripts'
     }])
   ]

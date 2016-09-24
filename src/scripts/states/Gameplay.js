@@ -56,7 +56,6 @@ export default class Gameplay extends _State {
     let x = 0;
     let y = 0;
     this.walls = this.game.add.group();
-    this.walls.add(Sprites.brick(this.game, 48, 48));
 
     while (x < WIDTH) {
       const leftBrick = Sprites.brick(this.game, x, 0);

@@ -13,7 +13,7 @@ export default class Gameplay extends _State {
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
-    this.player = Actors.player(this.game, this.world.centerX + 8, 64, this.world);
+    this.player = Actors.player(this.game, this.world.centerX + 8, this.world.centerY, this.world);
     this.brickCannon = Groups.brickCannon(this.game);
     this.game.add.existing(this.brickCannon);
     this.camera.follow(this.player.trump, Phaser.Camera.FOLLOW_LOCKON);

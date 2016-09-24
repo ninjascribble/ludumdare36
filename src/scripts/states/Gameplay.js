@@ -14,7 +14,7 @@ export default class Gameplay extends _State {
     this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
 
-    this.player = Actors.player(this.game, this.world.centerX + 8, this.world.centerY, this.world);
+    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.brickCannon = Groups.brickCannon(this.game);
     this.game.add.existing(this.brickCannon);
     this.camera.follow(this.player.sprite, Phaser.Camera.FOLLOW_LOCKON);

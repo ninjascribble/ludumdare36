@@ -17,8 +17,5 @@ export default class TrumpSprite extends _Sprite {
     this.animations.add('walkUp', [3, 4, 3, 5], 6, true);
     this.animations.add('walkRight', [6, 7, 6, 8], 6, true);
     this.animations.add('walkLeft', [9, 10, 9, 11], 6, true);
-
-
-    //this.anchor.setTo(0.5, 0);
   }
 }

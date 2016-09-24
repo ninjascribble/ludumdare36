@@ -11,7 +11,7 @@ export default class Menu extends _State {
   }
 
   createTitleText (x, y) {
-    return Fonts.display(this.game, x, y, 'this is the menu', 12, 'center', this.world);
+    return Fonts.display(this.game, x, y, 'Menu', 12, 'center', this.world);
   }
 
   createActionText (x, y) {

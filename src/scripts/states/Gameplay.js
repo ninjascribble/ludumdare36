@@ -20,18 +20,6 @@ export default class Gameplay extends _State {
     this.camera.follow(this.player.sprite, Phaser.Camera.FOLLOW_LOCKON);
     this.buildBoundryWalls();
 
-    const leftKey = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    leftKey.onDown.add(this.player.moveLeft, this.player);
-
-    const rightKey = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    rightKey.onDown.add(this.player.moveRight, this.player);
-
-    const upKey = this.input.keyboard.addKey(Phaser.Keyboard.UP);
-    upKey.onDown.add(this.player.moveUp, this.player);
-
-    const downKey = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    downKey.onDown.add(this.player.moveDown, this.player);
-
     const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
     wKey.onDown.add(() => {
       if (!this.isBrickAt(this.player.sprite.location)) {
@@ -96,7 +84,6 @@ export default class Gameplay extends _State {
       if (location.x > brick.bounds.left && location.x < brick.bounds.right && location.y > brick.bounds.top && location.y < brick.bounds.bottom) {
         return true;
       }
-
       return false;
     });
   }
@@ -104,5 +91,21 @@ export default class Gameplay extends _State {
   update () {
     this.game.physics.arcade.collide(this.brickCannon, this.brickCannon, this.onBrickCollision);
     this.game.physics.arcade.collide(this.brickCannon, this.player.sprite, this.onBrickCollision);
+
+    if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+      this.player.moveLeft();
+    }
+
+    if (this.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+      this.player.moveRight();
+    }
+
+    if (this.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+      this.player.moveUp();
+    }
+
+    if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+      this.player.moveDown();
+    }
   }
 }

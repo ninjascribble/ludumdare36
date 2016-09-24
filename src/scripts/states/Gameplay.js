@@ -4,43 +4,21 @@ import Fonts from '../fonts';
 import Groups from '../groups';
 import Sprites from '../sprites';
 
-const WIDTH = 320;
+const WIDTH = 256;
 const HEIGHT = 256;
 
 export default class Gameplay extends _State {
   create () {
     this.world.setBounds(0, 0, WIDTH, HEIGHT);
+
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
-    this.titleText = this.createTitleText(this.world.centerX, 40);
+
+    this.bricks = Groups.brickCannon(this.game);
+    this.game.add.existing(this.bricks);
 
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
-    this.brickCannon = Groups.brickCannon(this.game);
-    this.game.add.existing(this.brickCannon);
-    this.camera.follow(this.player.sprite, Phaser.Camera.FOLLOW_LOCKON);
     this.buildBoundryWalls();
-
-    const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
-    wKey.onDown.add(() => {
-      if (!this.isBrickAt(this.player.sprite.location)) {
-        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
-      }
-    });
-
-    const sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
-    sKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.down);
-    });
-
-    const aKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
-    aKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.left);
-    });
-
-    const dKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
-    dKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.right);
-    });
   }
 
   buildBoundryWalls () {
@@ -48,30 +26,16 @@ export default class Gameplay extends _State {
     let y = 0;
 
     while (x < WIDTH) {
-      const leftBrick = Sprites.brick(this.game, x, 0);
-      const rightBrick = Sprites.brick(this.game, x, HEIGHT - 16);
-      leftBrick.body.immovable = true;
-      rightBrick.body.immovable = true;
-
-      this.brickCannon.add(leftBrick);
-      this.brickCannon.add(rightBrick);
-      x += 16;
+      this.bricks.placeBrick(x, 0)
+      this.bricks.placeBrick(x, HEIGHT - 16)
+      x += 16
     }
 
     while (y < HEIGHT) {
-      const topBrick = Sprites.brick(this.game, 0, y);
-      const bottomBrick = Sprites.brick(this.game, WIDTH - 16, y);
-      topBrick.body.immovable = true;
-      bottomBrick.body.immovable = true;
-
-      this.brickCannon.add(topBrick);
-      this.brickCannon.add(bottomBrick);
-      y += 16;
+      this.bricks.placeBrick(0, y)
+      this.bricks.placeBrick(WIDTH - 16, y)
+      y += 16
     }
-  }
-
-  createTitleText (x, y) {
-    return Fonts.display(this.game, x, y, 'this is the Trump', 12, 'center', this.world);
   }
 
   onBrickCollision (wall, otherWall) {
@@ -79,18 +43,9 @@ export default class Gameplay extends _State {
     otherWall.body.immovable = true;
   }
 
-  isBrickAt (location) {
-    this.brickCannon.children.forEach((brick) => {
-      if (location.x > brick.bounds.left && location.x < brick.bounds.right && location.y > brick.bounds.top && location.y < brick.bounds.bottom) {
-        return true;
-      }
-      return false;
-    });
-  }
-
   update () {
-    this.game.physics.arcade.collide(this.brickCannon, this.brickCannon, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.brickCannon, this.player.sprite, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.player.bricks, this.bricks, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.player.bricks, this.player.bricks, this.onBrickCollision);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.moveLeft();
@@ -106,6 +61,10 @@ export default class Gameplay extends _State {
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
       this.player.moveDown();
+    }
+
+    if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+      this.player.throwBrick();
     }
   }
 }

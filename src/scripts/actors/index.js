@@ -3,11 +3,11 @@ import Sprites from '../sprites';
 
 module.exports = {
   player: function player (game, x, y, group = null) {
-    var ship = Sprites.ship(game, x, y);
-    var player = new Player(game, ship);
+    var trump = Sprites.trump(game, x, y);
+    var player = new Player(game, trump);
 
     if (group) {
-      group.add(player.ship);
+      group.add(player.trump);
     }
 
     return player;

@@ -10,6 +10,8 @@ const HEIGHT = 256;
 export default class Gameplay extends _State {
   create () {
     this.world.setBounds(0, 0, WIDTH, HEIGHT);
+    this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
+    this.game.add.existing(this.background);
     this.titleText = this.createTitleText(this.world.centerX, 40);
     this.player = Actors.player(this.game, this.world.centerX + 8, 64, this.world);
     this.brickCannon = Groups.brickCannon(this.game);

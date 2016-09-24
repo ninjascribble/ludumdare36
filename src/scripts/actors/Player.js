@@ -23,19 +23,29 @@ export default class Player extends _Actor {
   }
 
   moveLeft () {
-     this.trump.x= this.trump.x - 16;
+     //this.trump.x= this.trump.x - 16;
+     //this.trump.tweenLeft.to({x:this.trump.x - 16}, 250, Phaser.Easing.Linear.None, true);
+      this.trump.body.moveTo(300, 16, 180);
+     this.trump.animations.play('walkLeft');
+
   }
 
   moveRight () {
-    this.trump.x = this.trump.x + 16;
+    //this.trump.x = this.trump.x + 16;
+    this.trump.body.moveTo(300, 16, 0);
+    this.trump.animations.play('walkRight');
   }
 
   moveUp () {
-    this.trump.y = this.trump.y - 16;
+    //this.trump.y = this.trump.y - 16;
+    this.trump.body.moveTo(300, 16, 270);
+    this.trump.animations.play('walkUp');
   }
 
   moveDown () {
-    this.trump.y = this.trump.y + 16;
+    //this.trump.y = this.trump.y + 16;
+    this.trump.body.moveTo(300, 16, 90);
+    this.trump.animations.play('walkDown');
   }
 
   update () {

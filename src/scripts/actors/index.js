@@ -1,14 +1,15 @@
 import Alien from './Alien';
 import Human from './Human';
+import Fonts from '../fonts';
 import Groups from '../groups';
 import Player from './Player';
 import Sprites from '../sprites';
 
 module.exports = {
-  player: function player (game, x, y, group = null) {
+  player: function player (game, x, y, hud, group = null) {
     var sprite = Sprites.trump(game, x, y);
     var brickFactory = Groups.brickCannon(game);
-    var actor = new Player(game, sprite, brickFactory);
+    var actor = new Player(game, sprite, brickFactory, hud);
 
     if (group) {
       group.add(sprite);

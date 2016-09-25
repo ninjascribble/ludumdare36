@@ -16,8 +16,8 @@ module.exports = {
     changeState(stateManager, Gameplay);
   },
 
-  gameover: function gameplay (stateManager) {
-    changeState(stateManager, GameOver);
+  gameover: function gameover (stateManager, params) {
+    changeState(stateManager, GameOver, params);
   }
 };
 
@@ -30,9 +30,9 @@ function createState (state) {
   return new state(module.exports);
 }
 
-function changeState (stateManager, state) {
+function changeState (stateManager, state, params) {
   if (stateManager.checkState(state.name) != true) {
     stateManager.add(state.name, createState(state));
   }
-  stateManager.start(state.name);
+  stateManager.start(state.name, true, false, params);
 }

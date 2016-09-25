@@ -4,11 +4,31 @@ const THROW_BRICK_COOLDOWN = 500; // milliseconds
 const THROW_BRICK_VELOCITY = 300;
 
 export default class Player extends _Actor {
-  constructor (game, sprite, brickFactory) {
+  constructor (game, sprite, brickFactory, hud) {
     super(game, sprite);
     this.bricks = brickFactory;
+    this.hud = hud;
     this.canThrow = true;
-    this.cash = 100;
+    this.bricksLeft = 100;
+    this.points = 0;
+  }
+
+  set bricksLeft (value) {
+    this._bricksLeft = value;
+    this.hud.bricks(value);
+  }
+
+  get bricksLeft () {
+    return this._bricksLeft;
+  }
+
+  set points (value) {
+    this._points = value;
+    this.hud.points(value);
+  }
+
+  get points () {
+    return this._points;
   }
 
   throwBrick () {
@@ -44,7 +64,8 @@ export default class Player extends _Actor {
         break;
     }
 
-    this.bricks.fireBrick(x, y, vx, vy)
+    this.bricks.fireBrick(x, y, vx, vy);
+    this.bricksLeft -= 1;
     timer.start();
   }
 }

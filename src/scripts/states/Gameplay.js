@@ -39,6 +39,15 @@ export default class Gameplay extends _State {
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
 
+    this.timeRemaining = 20;
+    this.hud.time(this.timeRemaining);
+    this.timer = this.game.time.create();
+    this.timer.repeat(1000, this.timeRemaining, () => {
+      this.timeRemaining--;
+      this.hud.time(this.timeRemaining);
+    });
+    this.timer.start();
+
     this.buildBoundryWalls();
 
     this.pathfinding = services.pathfinding();
@@ -144,6 +153,13 @@ export default class Gameplay extends _State {
       this.stateProvider.gameover(this.state, {
         score: this.player.points,
         reason: 'You ran out of bricks'
+      });
+    }
+
+    if (this.timeRemaining <= 0) {
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: 'You ran out of time'
       });
     }
 

@@ -21,15 +21,19 @@ export default class Gameplay extends _State {
 
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
+    
+    this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
+    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.bricks, this.world);
+
+
 
     this.enemies = this.game.add.group();
     this.humans = this.game.add.group();
 
-    this.levels = levels.create(this.game, this.humans, this.enemies, this.bricks);
+    this.levels = levels.create(this.game, this.humans, this.enemies, this.bricks, this.player);
     this.levels.load(0);
 
-    this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
-    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.bricks, this.world);
+
 
     this.timeRemaining = 20;
     this.hud.time(this.timeRemaining);

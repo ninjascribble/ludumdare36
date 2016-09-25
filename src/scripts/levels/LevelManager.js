@@ -6,12 +6,13 @@ const LEVELS = {
 }
 
 export default class LevelManager{
-  constructor(game, humans, enemies, bricks){
+  constructor(game, humans, enemies, bricks, player){
     this.currentLevel = 0;
     this.humans = humans;
     this.enemies = enemies;
     this.game = game;
     this.bricks = bricks;
+    this.player = player;
   }
 
   load (index) {
@@ -23,6 +24,7 @@ export default class LevelManager{
       this.buildHumans(LEVELS[index].humans)
       this.buildEnemies(LEVELS[index].enemies)
       this.buildBoundryWalls();
+      this.placePlayer(LEVELS[index].player)
       return true;
     }
     else {
@@ -46,7 +48,11 @@ export default class LevelManager{
       Actors.alien(this.game, enemy.x, enemy.y, this.enemies);
     });
   }
-
+  //We're passing the player's position as an object to this function.
+  placePlayer (position = []){
+    this.player.sprite.x = position.x;
+    this.player.sprite.y = position.y;
+  }
   buildBoundryWalls () {
     let x = 0;
     let y = 0;

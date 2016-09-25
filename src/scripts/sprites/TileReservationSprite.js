@@ -13,6 +13,5 @@ export default class TileReservationSprite extends _Sprite {
   constructor (game, x, y) {
     super(game, x, y, KEY);
     game.physics.enable(this);
-    // this.body.moves = false;
   }
 }

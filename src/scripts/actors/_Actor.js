@@ -12,6 +12,7 @@ export default class Actor {
     this.facing = DOWN;
     this.sprite = sprite;
     this.tileReservation = tileReservation;
+    this.game.add.existing(tileReservation);
   }
 
   move (x, y, facing, animation, collisionObjects) {
@@ -70,6 +71,7 @@ export default class Actor {
             clearPath = false;
             this.tileReservation.x = origX;
             this.tileReservation.y = origY;
+            console.log('colision!');
           }
         });
 

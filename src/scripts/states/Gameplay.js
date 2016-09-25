@@ -39,6 +39,34 @@ export default class Gameplay extends _State {
     downKey.onDown.add(() => {
       this.player.tryMoveDown([this.brickCannon]);
     }, this.player);
+
+    const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
+    wKey.onDown.add(() => {
+      if (this.player.canMove) {
+        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
+      }
+    });
+
+    const sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
+    sKey.onDown.add(() => {
+      if (this.player.canMove) {
+        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.down);
+      }
+    });
+
+    const aKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
+    aKey.onDown.add(() => {
+      if (this.player.canMove) {
+        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.left);
+      }
+    });
+
+    const dKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
+    dKey.onDown.add(() => {
+      if (this.player.canMove) {
+        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.right);
+      }
+    });
   }
 
   buildBoundryWalls () {

@@ -17,10 +17,13 @@ export default class Gameplay extends _State {
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
 
-    this.mexican = Actors.mexican(this.game, WIDTH / 2, 16, this.world);
-    this.mexican.moveTimer();
+    this.mexicans = Groups.interlopers(this.game);
+    this.mexicans.add(Actors.mexican(this.game, WIDTH / 2, 16, this.world));
+    this.mexicans.moveTimer();
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
+    this.mexicans.registerObstacle(this.bricks);
+    this.mexicans.registerObstacle(this.player.bricks);
   }
 
   buildBoundryWalls () {
@@ -50,8 +53,8 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.player.bricks, this.player.bricks, this.onBrickCollision);
     this.game.physics.arcade.collide(this.bricks, this.player.tileReservation, this.onBrickCollision);
     this.game.physics.arcade.collide(this.player.bricks, this.player.tileReservation, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.bricks, this.mexican.tileReservation, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.player.bricks, this.mexican.tileReservation, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.bricks, this.mexicans.tileReservations, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.player.bricks, this.mexicans.tileReservations, this.onBrickCollision);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.tryMoveLeft([this.bricks, this.player.bricks]);

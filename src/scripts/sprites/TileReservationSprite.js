@@ -1,7 +1,7 @@
 import _Sprite from './_Sprite';
 
-const KEY = 'not_blank';
-const SRC = 'assets/not_blank.png';
+const KEY = 'blank';
+const SRC = 'assets/blank.png';
 const WIDTH = 16;
 const HEIGHT = 16;
 

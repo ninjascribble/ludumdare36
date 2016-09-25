@@ -21,6 +21,7 @@ export default class Actor {
       return;
     }
 
+    this.facing = facing;
     this.processingMove = true;
     this.testDestination(x, y, collisionObjects).then((isClear) => {
       this.processingMove = false;
@@ -29,7 +30,6 @@ export default class Actor {
           this.sprite.animations.play(animation);
         }
 
-        this.facing = facing;
         this.canMove = false;
 
         this.game.tweens.create(this.sprite.body)

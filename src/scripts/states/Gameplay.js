@@ -38,12 +38,6 @@ export default class Gameplay extends _State {
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
-    this.player.onNoBricksLeft.addOnce(() => {
-      this.stateProvider.gameover(this.state, {
-        score: this.player.points,
-        reason: 'You ran out of bricks'
-      });
-    })
 
     this.buildBoundryWalls();
 
@@ -92,6 +86,10 @@ export default class Gameplay extends _State {
     }
   }
 
+  onPlayerEnemiesCollide (player, enemy) {
+    player.actor.kill();
+  }
+
   onHumansEnemiesCollide (human, enemy) {
     human.actor.kill();
   }
@@ -104,7 +102,7 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.enemies, this.enemies);
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
-    this.game.physics.arcade.collide(this.player.sprite, this.enemies);
+    this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide);
     this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
     this.game.physics.arcade.collide(this.humans, this.player.bricks);
@@ -119,6 +117,15 @@ export default class Gameplay extends _State {
       return human.saved;
     }).list;
 
+    let bricksRemaining = this.player.bricksLeft;
+
+    if (this.player.isAlive == false) {
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: `You were killed by the aliens`
+      });
+    }
+
     if (aliveHumans.length <= 0) {
       if (savedHumans.length > 0) {
         this.stateProvider.gameover(this.state, {
@@ -131,6 +138,13 @@ export default class Gameplay extends _State {
           reason: `There were no survivors`
         });
       }
+    }
+
+    if (bricksRemaining < 0) {
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: 'You ran out of bricks'
+      });
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {

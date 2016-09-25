@@ -20,6 +20,7 @@ export default class Actor {
 
   kill () {
     this.sprite.kill();
+    this.isAlive = false;
   }
 
   move (x, y, facing, animation) {

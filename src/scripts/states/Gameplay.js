@@ -96,9 +96,11 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.enemies);
+    this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
     this.game.physics.arcade.collide(this.humans, this.player.bricks);
     this.game.physics.arcade.collide(this.humans, this.enemies);
+    this.game.physics.arcade.collide(this.humans, this.humans);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.moveLeft();

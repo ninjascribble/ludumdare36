@@ -8,7 +8,7 @@ export default class BrickCannon extends Phaser.Group {
 
   createBrick (x, y) {
     const brick = Sprites.brick(this.game, x, y);
-    brick.onDone.add(() => {
+    brick.onDone.addOnce(() => {
       this.onBrickDone.dispatch();
     }, this);
     return this.add(brick);

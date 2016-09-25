@@ -8,7 +8,7 @@ function pointToTile (point) {
 }
 
 function tileToPoint (point) {
-  return new Phaser.Point(Math.floor(point.x * 16) + 8, Math.floor(point.y * 16) + 8);
+  return new Phaser.Point(Math.floor(point.x * 16), Math.floor(point.y * 16));
 }
 
 export default {

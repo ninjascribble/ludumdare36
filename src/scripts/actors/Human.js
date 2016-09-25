@@ -5,5 +5,7 @@ export default class Human extends _Actor{
     super(game, sprite);
   }
 
-
+  save () {
+    this.sprite.save();
+  }
 }

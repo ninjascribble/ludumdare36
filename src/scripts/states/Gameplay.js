@@ -49,7 +49,8 @@ export default class Gameplay extends _State {
           done = done && !result;
         });
         if (done) {
-          this.stateProvider.gameover(this.state);
+          let score = this.pathfinding.countContiguousTiles(this.player.sprite);
+          this.stateProvider.gameover(this.state, { score });
         }
       });
     });

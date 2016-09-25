@@ -27,10 +27,9 @@ export default class Gameplay extends _State {
     this.enemy4 = Actors.alien(this.game, WIDTH / 4, 64, this.enemies);
     this.enemy5 = Actors.alien(this.game, WIDTH * 3 / 4, 64, this.enemies);
 
-    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
+    this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
+    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
     this.buildBoundryWalls();
-
-    this.hud = Actors.hud(this.game, 0, 0, WIDTH, 16, this.world);
 
     this.pathfinding = services.pathfinding();
     this.game.time.events.loop(2000, () => {

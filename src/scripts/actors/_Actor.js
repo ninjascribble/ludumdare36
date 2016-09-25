@@ -7,15 +7,18 @@ const RIGHT = 'right';
 export default class Actor {
   constructor (game, sprite) {
     this.game = game;
+    this.sprite = sprite;
     this.canMove = true;
     this.isAlive = true;
     this.facing = DOWN;
-    this.sprite = sprite;
+
+    this.sprite.body.onMoveComplete.add(() => this.canMove = true);
+    this.sprite.body.onCollide.add(() => this.canMove = true);
   }
 
   move (x, y, facing, animation) {
     if (this.canMove == false) {
-      return
+      return;
     }
 
     if (animation) {
@@ -24,12 +27,21 @@ export default class Actor {
 
     this.canMove = false;
     this.facing = facing;
-    this.game.tweens.create(this.sprite.body)
-      .to({ x: this.sprite.x + x, y: this.sprite.y + y }, MOVE_DURATION)
-      .start()
-      .onComplete.addOnce(() => {
-        this.canMove = true;
-      })
+
+    switch (this.facing) {
+      case LEFT:
+        this.sprite.body.moveTo(MOVE_DURATION, 16, 180)
+        break;
+      case RIGHT:
+        this.sprite.body.moveTo(MOVE_DURATION, 16, 0)
+        break;
+      case UP:
+        this.sprite.body.moveTo(MOVE_DURATION, 16, 270)
+        break;
+      case DOWN:
+        this.sprite.body.moveTo(MOVE_DURATION, 16, 90)
+        break;
+    }
   }
 
   moveLeft () {
@@ -46,9 +58,5 @@ export default class Actor {
 
   moveDown () {
     this.move(0, 16, DOWN, 'walkDown');
-  }
-
-  update () {
-
   }
 }

@@ -17,24 +17,15 @@ export default class Gameplay extends _State {
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
 
-    this.spawnEnemies();
+    this.enemies = this.game.add.group();
+    this.enemy1 = Actors.mexican(this.game, WIDTH/2, 16, this.enemies);
+    this.enemy2 = Actors.mexican(this.game, 16, 16, this.enemies);
+    this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.enemies);
+    this.enemy4 = Actors.mexican(this.game, WIDTH/4, 32, this.enemies);
+    this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.enemies);
 
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
-  }
-
-  spawnEnemies(){
-    this.enemy1 = Actors.mexican(this.game, WIDTH/2, 16, this.world);
-    this.enemy2 = Actors.mexican(this.game, 16, 16, this.world);
-    this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.world);
-    this.enemy4 = Actors.mexican(this.game, WIDTH/4, 32, this.world);
-    this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.world);
-
-    this.enemy1.moveTimer();
-    this.enemy2.moveTimer();
-    this.enemy3.moveTimer();
-    this.enemy4.moveTimer();
-    this.enemy5.moveTimer();
   }
 
   buildBoundryWalls () {
@@ -54,14 +45,14 @@ export default class Gameplay extends _State {
     }
   }
 
-  onBrickCollision (wall, otherWall) {
-    wall.body.immovable = true;
-    otherWall.body.immovable = true;
-  }
-
   update () {
-    this.game.physics.arcade.collide(this.player.bricks, this.bricks, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.player.bricks, this.player.bricks, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.player.bricks, this.bricks);
+    this.game.physics.arcade.collide(this.player.bricks, this.player.bricks);
+    this.game.physics.arcade.collide(this.enemies, this.bricks);
+    this.game.physics.arcade.collide(this.enemies, this.player.bricks);
+    this.game.physics.arcade.collide(this.player.sprite, this.bricks);
+    this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
+    this.game.physics.arcade.collide(this.player.sprite, this.enemies);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.moveLeft();

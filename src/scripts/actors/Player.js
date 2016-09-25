@@ -11,15 +11,11 @@ export default class Player extends _Actor {
     this.canThrow = true;
     this.bricksLeft = 20;
     this.points = 0;
-    this.onNoBricksLeft = new Phaser.Signal();
   }
 
   set bricksLeft (value) {
     this._bricksLeft = value;
     this.hud.bricks(value);
-    if (value <= 0) {
-      this.onNoBricksLeft.dispatch();
-    }
   }
 
   get bricksLeft () {

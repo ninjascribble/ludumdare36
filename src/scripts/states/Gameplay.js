@@ -10,7 +10,6 @@ const WIDTH = 320;
 const HEIGHT = 256;
 const OFFSET_X = 0;
 const OFFSET_Y = 0;
-let checkBounds;
 
 export default class Gameplay extends _State {
   create () {
@@ -48,18 +47,14 @@ export default class Gameplay extends _State {
       this.humans.forEachAlive((human) => {
         var promises = [];
 
-        this.enemies.forEach((enemy) => {
+        this.enemies.forEachAlive((enemy) => {
           promises.push(new Promise((resolve) => {
             this.pathfinding.findPath(enemy, human, resolve);
           }));
         });
 
         Promise.all(promises).then((results) => {
-          let done = true;
-          results.forEach((result) => {
-            done = done && !result;
-          });
-          if (done) {
+          if (results.every((result) => !result)) {
             human.actor.save();
             this.player.points += 200;
             this.player.points += this.pathfinding.countContiguousTiles(human);
@@ -68,7 +63,6 @@ export default class Gameplay extends _State {
       });
     });
   }
-
 
   endGame (reason) {
     this.stateProvider.gameover(this.state, {
@@ -147,38 +141,27 @@ export default class Gameplay extends _State {
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-      checkBounds = new Phaser.Rectangle(this.player.sprite.x + 1, this.player.sprite.y + 1, this.player.sprite.width - 2, this.player.sprite.height - 2);
-
+      var rect = new Phaser.Rectangle(this.player.sprite.x + 1, this.player.sprite.y + 1, this.player.sprite.width - 2, this.player.sprite.height - 2);
+      var gameObjs = this.bricks.children.concat(this.enemies.children, this.humans.children);
 
       switch (this.player.facing) {
         case 'up':
-          checkBounds.y -= this.player.sprite.width;
+          rect.y -= this.player.sprite.width;
           break;
         case 'down':
-          checkBounds.y += this.player.sprite.width;
+          rect.y += this.player.sprite.width;
           break;
         case 'left':
-          checkBounds.x -= this.player.sprite.height;
+          rect.x -= this.player.sprite.height;
           break;
         case 'right':
-          checkBounds.x += this.player.sprite.height;
+          rect.x += this.player.sprite.height;
           break;
       }
 
-      const gameObjs = this.player.bricks.children.concat(this.bricks.children, this.enemies.children, this.humans.children);
-      let obstructed = false;
-      gameObjs.forEach((obj) => {
-        const rect = new Phaser.Rectangle(obj.body.x, obj.body.y, obj.body.width, obj.body.height);
-        if (rect.intersects(checkBounds)) {
-          obstructed = true;
-        }
-      });
-
-      if (obstructed) {
-        return;
+      if (gameObjs.every((obj) => rect.intersects(obj.body) == false)) {
+        this.player.throwBrick();
       }
-
-      this.player.throwBrick();
     }
   }
 }

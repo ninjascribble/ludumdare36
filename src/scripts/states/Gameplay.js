@@ -24,10 +24,9 @@ export default class Gameplay extends _State {
 
     this.enemies = this.game.add.group();
     this.humans = this.game.add.group();
-    
-    this.levels = levels.create(this.game, this.humans, this.enemies);
-    this.levels.levelTwo();
 
+    this.levels = levels.create(this.game, this.humans, this.enemies);
+    this.levels.load(0);
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);

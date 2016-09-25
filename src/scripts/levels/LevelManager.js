@@ -1,64 +1,40 @@
 import Actors from '../actors';
 
-const WIDTH = 320;
-const HEIGHT = 256;
+const LEVELS = {
+  0: require('./level0.js'),
+  1: require('./level1.js')
+}
 
 export default class LevelManager{
-  constructor(game, humans, aliens){
+  constructor(game, humans, enemies){
     this.humans = humans;
-    this.aliens = aliens;
+    this.enemies = enemies;
     this.game = game;
   }
 
-  levelLoad(level){
-    switch (level){
-      case 1: levelOne();
-        break;
-      case 2: levelTwo();
-        break;
-      case 3: levelThree();
-        break;
-      default:
-        break;
+  load (index) {
+    this.humans.removeAll();
+    this.enemies.removeAll();
+
+    if (LEVELS[index]) {
+      this.buildHumans(LEVELS[index].humans)
+      this.buildEnemies(LEVELS[index].enemies)
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
-  levelOne(){
-    this.humans.removeAll();
-    this.aliens.removeAll();
-
-    this.human1 = Actors.human(this.game, WIDTH / 4, HEIGHT /4, this.humans);
-    this.enemy1 = Actors.alien(this.game, WIDTH * 3 / 4, HEIGHT * 3 / 4, this.aliens);
-    /*this.human1 = Actors.human(this.game, WIDTH - 32, HEIGHT - 64, this.humans);
-    this.human2 = Actors.human(this.game, WIDTH / 2, HEIGHT - 64, this.humans);
-    this.human3 = Actors.human(this.game, 32, HEIGHT - 64, this.humans);
-
-    this.enemy1 = Actors.alien(this.game, WIDTH / 2, 32, this.aliens);
-    this.enemy2 = Actors.alien(this.game, 16, 32, this.aliens);
-    this.enemy3 = Actors.alien(this.game, WIDTH - 32, 32, this.aliens);
-    this.enemy4 = Actors.alien(this.game, WIDTH / 4, 64, this.aliens);
-    this.enemy5 = Actors.alien(this.game, WIDTH * 3 / 4, 64, this.aliens);*/
+  buildHumans (positions) {
+    positions.forEach((human) => {
+      Actors.human(this.game, human.x, human.y, this.humans);
+    });
   }
 
-  levelTwo(){
-    this.humans.removeAll();
-    this.aliens.removeAll();
-
-    this.human1 = Actors.human(this.game, WIDTH / 4, HEIGHT / 4, this.humans);
-    this.human1 = Actors.human(this.game, WIDTH / 2, HEIGHT / 4, this.humans);
-    this.human1 = Actors.human(this.game, WIDTH / 4, HEIGHT / 2, this.humans);
-
-    this.enemy1 = Actors.alien(this.game, WIDTH * 3 / 4, HEIGHT * 3 / 4, this.aliens);
+  buildEnemies (positions) {
+    positions.forEach((enemy) => {
+      Actors.alien(this.game, enemy.x, enemy.y, this.enemies);
+    });
   }
-
-  levelThree(){
-    //this.human1 = Actors.human(this.game,,, this.humans);
-
-    this.humans.removeAll();
-    this.aliens.removeAll();
-  }
-
-
-
-
 }

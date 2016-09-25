@@ -62,10 +62,8 @@ export default class Actor {
 
   moveTimer(){
     var moveDelay = this.game.time.create();
-    moveDelay.loop(2000, this.travel, this);
-    //moveDelay.add(2000/*1175*/, this.travel, this);
+    moveDelay.loop(500, this.travel, this);
     moveDelay.start();
-    //console.log(moveDelay.next);
   }
 
   travel(){

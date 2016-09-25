@@ -17,6 +17,10 @@ export default class BrickSprite extends _PhysicsSprite {
 
   onCollide () {
     super.onCollide();
+    if (!this.body.immovable) {
+      this.game.sound.play('brickImpact');
+    }
+
     this.body.immovable = true;
     this.onDone.dispatch();
   }

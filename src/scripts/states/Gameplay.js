@@ -5,7 +5,7 @@ import Groups from '../groups';
 import Sprites from '../sprites';
 import services from '../services';
 
-const WIDTH = 256;
+const WIDTH = 320;
 const HEIGHT = 256;
 
 export default class Gameplay extends _State {
@@ -30,7 +30,7 @@ export default class Gameplay extends _State {
 
     this.pathfinding = services.pathfinding();
     this.game.time.events.loop(2000, () => {
-      this.pathfinding.calculateGrid([this.bricks, this.player.bricks]);
+      this.pathfinding.calculateGrid([this.bricks, this.player.bricks], { width: WIDTH, height: HEIGHT }, { width: 16, height: 16 });
       const promises = [];
 
       this.enemies.forEach((enemy) => {
@@ -45,7 +45,7 @@ export default class Gameplay extends _State {
           done = done && !result;
         });
         if (done) {
-          console.dir('done!');
+          this.stateProvider.gameover(this.state);
         }
       });
     });

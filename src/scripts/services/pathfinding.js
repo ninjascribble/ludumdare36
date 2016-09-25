@@ -3,7 +3,7 @@ import Easystar from 'easystarjs';
 let easystar = new Easystar.js();
 
 function pointToTile (point) {
-  return new Phaser.Point(Math.floor(point.x / 16), Math.floor(point.y / 16));
+  return new Phaser.Point(Phaser.Math.snapTo(point.x , 16) / 16, Phaser.Math.snapTo(point.y, 16) / 16);
 }
 
 function tileToPoint (point) {
@@ -19,13 +19,15 @@ export default {
     easystar.calculate();
   },
 
-  calculateGrid: (obstacleGroups) => {
+  calculateGrid: (obstacleGroups, mapSize, gridSize) => {
     const walkables = [0];
     const mapData = [];
+    const gridWidth = mapSize.width / gridSize.width;
+    const gridHeight = mapSize.height / gridSize.height;
     console.log('calculating grid');
 
-    for (var i = 0; i < 16; i++) {
-      for (var j = 0; j < 16; j++) {
+    for (var i = 0; i < gridHeight; i++) {
+      for (var j = 0; j < gridWidth; j++) {
         if (!mapData[i]) {
           mapData[i] = [];
         }

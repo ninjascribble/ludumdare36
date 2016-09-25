@@ -25,6 +25,7 @@ export default class LevelManager{
       this.buildEnemies(LEVELS[index].enemies)
       this.buildBoundryWalls();
       this.placePlayer(LEVELS[index].player)
+      this.placeBricks(LEVELS[index].brickPositions)
       return true;
     }
     else {
@@ -52,6 +53,11 @@ export default class LevelManager{
   placePlayer (position = []){
     this.player.sprite.x = position.x;
     this.player.sprite.y = position.y;
+  }
+  placeBricks(positions = []){
+    positions.forEach((brick) => {
+      this.bricks.placeBrick(brick.x, brick.y);
+    });
   }
   buildBoundryWalls () {
     let x = 0;

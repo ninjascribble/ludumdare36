@@ -26,6 +26,7 @@
     "webpack-dev-server": "1.14.1"
   },
   "dependencies": {
+    "easystarjs": "^0.3.0",
     "phaser": "2.6.1"
   }
 }

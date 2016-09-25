@@ -7,23 +7,21 @@ export default class Mexican extends _Actor {
 
   moveTimer(){
     var moveDelay = this.game.time.create();
-    moveDelay.loop(2000, this.travel, this);
-    //moveDelay.add(2000/*1175*/, this.travel, this);
+    moveDelay.loop(500, this.travel, this);
     moveDelay.start();
-    //console.log(moveDelay.next);
   }
 
   travel(){
     var dirNum = this.game.rnd.integerInRange(1, 4);
 
     switch(dirNum){
-      case 1: super.moveLeft();
+      case 1: this.moveLeft();
         break;
-      case 2: super.moveRight();
+      case 2: this.moveRight();
         break;
-      case 3: super.moveUp();
+      case 3: this.moveUp();
         break;
-      case 4: super.moveDown();
+      case 4: this.moveDown();
         break;
       default:
         break;

@@ -4,7 +4,7 @@ import Fonts from '../fonts';
 import Groups from '../groups';
 import Sprites from '../sprites';
 
-const WIDTH = 256;
+const WIDTH = 320;
 const HEIGHT = 256;
 
 export default class Gameplay extends _State {
@@ -14,15 +14,12 @@ export default class Gameplay extends _State {
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
 
-    this.bricks = Groups.brickCannon(this.game);
-    this.game.add.existing(this.bricks);
-
     this.enemies = this.game.add.group();
-    this.enemy1 = Actors.mexican(this.game, WIDTH/2, 16, this.enemies);
-    this.enemy2 = Actors.mexican(this.game, 16, 16, this.enemies);
-    this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.enemies);
-    this.enemy4 = Actors.mexican(this.game, WIDTH/4, 32, this.enemies);
-    this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.enemies);
+    Actors.mexican(this.game, WIDTH/2, 16, this.enemies);
+    Actors.mexican(this.game, 16, 16, this.enemies);
+    Actors.mexican(this.game, WIDTH - 32, 16, this.enemies);
+    Actors.mexican(this.game, WIDTH/4, 32, this.enemies);
+    Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.enemies);
 
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
@@ -33,24 +30,21 @@ export default class Gameplay extends _State {
     let y = 0;
 
     while (x < WIDTH) {
-      this.bricks.placeBrick(x, 0)
-      this.bricks.placeBrick(x, HEIGHT - 16)
+      this.player.bricks.placeBrick(x, 0)
+      this.player.bricks.placeBrick(x, HEIGHT - 16)
       x += 16
     }
 
     while (y < HEIGHT) {
-      this.bricks.placeBrick(0, y)
-      this.bricks.placeBrick(WIDTH - 16, y)
+      this.player.bricks.placeBrick(0, y)
+      this.player.bricks.placeBrick(WIDTH - 16, y)
       y += 16
     }
   }
 
   update () {
-    this.game.physics.arcade.collide(this.player.bricks, this.bricks);
     this.game.physics.arcade.collide(this.player.bricks, this.player.bricks);
-    this.game.physics.arcade.collide(this.enemies, this.bricks);
-    this.game.physics.arcade.collide(this.enemies, this.player.bricks);
-    this.game.physics.arcade.collide(this.player.sprite, this.bricks);
+    this.game.physics.arcade.collide(this.enemies,       this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.enemies);
 

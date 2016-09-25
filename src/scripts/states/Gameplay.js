@@ -3,6 +3,7 @@ import Actors from '../actors';
 import Fonts from '../fonts';
 import Groups from '../groups';
 import Sprites from '../sprites';
+import services from '../services';
 
 const WIDTH = 256;
 const HEIGHT = 256;
@@ -18,14 +19,36 @@ export default class Gameplay extends _State {
     this.game.add.existing(this.bricks);
 
     this.enemies = this.game.add.group();
-    this.enemy1 = Actors.mexican(this.game, WIDTH/2, 16, this.enemies);
+    this.enemy1 = Actors.mexican(this.game, WIDTH / 2, 16, this.enemies);
     this.enemy2 = Actors.mexican(this.game, 16, 16, this.enemies);
     this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.enemies);
-    this.enemy4 = Actors.mexican(this.game, WIDTH/4, 32, this.enemies);
+    this.enemy4 = Actors.mexican(this.game, WIDTH / 4, 32, this.enemies);
     this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.enemies);
 
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
+
+    this.pathfinding = services.pathfinding();
+    this.game.time.events.loop(2000, () => {
+      this.pathfinding.calculateGrid([this.bricks, this.player.bricks]);
+      const promises = [];
+
+      this.enemies.forEach((enemy) => {
+        promises.push(new Promise((resolve) => {
+          this.pathfinding.findPath(enemy, this.player.sprite, resolve);
+        }));
+      });
+
+      Promise.all(promises).then((results) => {
+        let done = true;
+        results.forEach((result) => {
+          done = done && !result;
+        });
+        if (done) {
+          console.dir('done!');
+        }
+      });
+    });
   }
 
   buildBoundryWalls () {
@@ -33,15 +56,15 @@ export default class Gameplay extends _State {
     let y = 0;
 
     while (x < WIDTH) {
-      this.bricks.placeBrick(x, 0)
-      this.bricks.placeBrick(x, HEIGHT - 16)
-      x += 16
+      this.bricks.placeBrick(x, 0);
+      this.bricks.placeBrick(x, HEIGHT - 16);
+      x += 16;
     }
 
     while (y < HEIGHT) {
-      this.bricks.placeBrick(0, y)
-      this.bricks.placeBrick(WIDTH - 16, y)
-      y += 16
+      this.bricks.placeBrick(0, y);
+      this.bricks.placeBrick(WIDTH - 16, y);
+      y += 16;
     }
   }
 

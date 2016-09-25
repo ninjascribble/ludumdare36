@@ -12,10 +12,12 @@ export default class BrickSprite extends _PhysicsSprite {
 
   constructor (game, x, y) {
     super(game, x, y, KEY);
+    this.onDone = new Phaser.Signal();
   }
 
   onCollide () {
     super.onCollide();
     this.body.immovable = true;
+    this.onDone.dispatch();
   }
 }

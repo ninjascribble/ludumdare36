@@ -45,7 +45,7 @@ export default class Gameplay extends _State {
     this.buildBoundryWalls();
 
     this.pathfinding = services.pathfinding();
-    this.game.time.events.loop(2000, () => {
+    this.player.bricks.onBrickDone.add(() => {
       this.pathfinding.calculateGrid([this.bricks, this.player.bricks], { width: WIDTH, height: HEIGHT }, { width: 16, height: 16 });
       const promises = [];
 
@@ -61,8 +61,10 @@ export default class Gameplay extends _State {
           done = done && !result;
         });
         if (done) {
-          this.player.points += this.pathfinding.countContiguousTiles(this.player.sprite);
-          this.stateProvider.gameover(this.state, { score: this.player.points });
+          this.game.time.events.add(1000, () => {
+            this.player.points += this.pathfinding.countContiguousTiles(this.player.sprite);
+            this.stateProvider.gameover(this.state, { score: this.player.points });
+          });
         }
       });
     });

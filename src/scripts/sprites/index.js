@@ -1,7 +1,8 @@
 import TrumpSprite from './TrumpSprite';
 import BrickSprite from './BrickSprite';
-import CheckerboardSprite from './CheckerboardSprite';
 import MexicanSprite from './MexicanSprite';
+import CheckerboardSprite from './CheckerboardSprite';
+import TileReservationSprite from './TileReservationSprite';
 
 module.exports = {
   loadResources: function loadResources (loader) {
@@ -9,6 +10,7 @@ module.exports = {
     BrickSprite.loadResource(loader);
     CheckerboardSprite.loadResource(loader);
     MexicanSprite.loadResource(loader);
+    TileReservationSprite.loadResource(loader);
   },
 
   trump: function playertrump (game, x, y) {
@@ -25,5 +27,9 @@ module.exports = {
 
   mexican: function mexicanSprite (game, x, y) {
     return new MexicanSprite(game, x, y);
+  },
+
+  tileReservation: function tileReservationSprite (game, x, y) {
+    return new TileReservationSprite(game, x, y);
   }
 };

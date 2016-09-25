@@ -21,38 +21,24 @@ export default class Gameplay extends _State {
     this.buildBoundryWalls();
 
     const leftKey = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    leftKey.onDown.add(this.player.moveLeft, this.player);
+    leftKey.onDown.add(() => {
+      this.player.tryMoveLeft([this.brickCannon]);
+    }, this.player);
 
     const rightKey = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    rightKey.onDown.add(this.player.moveRight, this.player);
+    rightKey.onDown.add(() => {
+      this.player.tryMoveRight([this.brickCannon]);
+    }, this.player);
 
     const upKey = this.input.keyboard.addKey(Phaser.Keyboard.UP);
-    upKey.onDown.add(this.player.moveUp, this.player);
+    upKey.onDown.add(() => {
+      this.player.tryMoveUp([this.brickCannon]);
+    }, this.player);
 
     const downKey = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    downKey.onDown.add(this.player.moveDown, this.player);
-
-    const wKey = this.input.keyboard.addKey(Phaser.Keyboard.W);
-    wKey.onDown.add(() => {
-      if (!this.isBrickAt(this.player.sprite.location)) {
-        this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.up);
-      }
-    });
-
-    const sKey = this.input.keyboard.addKey(Phaser.Keyboard.S);
-    sKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.down);
-    });
-
-    const aKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
-    aKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.left);
-    });
-
-    const dKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
-    dKey.onDown.add(() => {
-      this.brickCannon.fireBrick(this.player.sprite.position, this.brickCannon.direction.right);
-    });
+    downKey.onDown.add(() => {
+      this.player.tryMoveDown([this.brickCannon]);
+    }, this.player);
   }
 
   buildBoundryWalls () {
@@ -91,18 +77,8 @@ export default class Gameplay extends _State {
     otherWall.body.immovable = true;
   }
 
-  isBrickAt (location) {
-    this.brickCannon.children.forEach((brick) => {
-      if (location.x > brick.bounds.left && location.x < brick.bounds.right && location.y > brick.bounds.top && location.y < brick.bounds.bottom) {
-        return true;
-      }
-
-      return false;
-    });
-  }
-
   update () {
     this.game.physics.arcade.collide(this.brickCannon, this.brickCannon, this.onBrickCollision);
-    this.game.physics.arcade.collide(this.brickCannon, this.player.sprite, this.onBrickCollision);
+    this.game.physics.arcade.collide(this.brickCannon, this.player.tileReservation);
   }
 }

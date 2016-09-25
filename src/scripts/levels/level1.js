@@ -6,5 +6,6 @@ module.exports = {
   ],
   enemies: [
     { x: 240, y: 192 }
-  ]
+  ],
+  player: { x: 160, y: 128 }
 };

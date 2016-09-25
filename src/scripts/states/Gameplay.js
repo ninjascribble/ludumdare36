@@ -29,7 +29,7 @@ export default class Gameplay extends _State {
     this.levels.load(0);
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
-    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
+    this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.bricks, this.world);
 
     this.timeRemaining = 20;
     this.hud.time(this.timeRemaining);
@@ -42,8 +42,8 @@ export default class Gameplay extends _State {
 
 
     this.pathfinding = services.pathfinding();
-    this.player.bricks.onBrickDone.add(() => {
-      this.pathfinding.calculateGrid([this.bricks, this.player.bricks], { width: WIDTH, height: HEIGHT }, { width: 16, height: 16 });
+    this.bricks.onBrickDone.add(() => {
+      this.pathfinding.calculateGrid([this.bricks], { width: WIDTH, height: HEIGHT }, { width: 16, height: 16 });
 
       this.humans.forEachAlive((human) => {
         var promises = [];
@@ -77,6 +77,11 @@ export default class Gameplay extends _State {
     });
   }
 
+  nextLevel () {
+    if (!this.levels.next()) {
+      this.endGame('You saved the world!');
+    }
+  }
 
   onPlayerEnemiesCollide (player, enemy) {
     player.actor.kill();
@@ -87,17 +92,13 @@ export default class Gameplay extends _State {
   }
 
   update () {
-    this.game.physics.arcade.collide(this.player.bricks, this.bricks);
-    this.game.physics.arcade.collide(this.player.bricks, this.player.bricks);
+    this.game.physics.arcade.collide(this.bricks, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.bricks);
-    this.game.physics.arcade.collide(this.enemies, this.player.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
-    this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide);
     this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
-    this.game.physics.arcade.collide(this.humans, this.player.bricks);
     this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide);
     this.game.physics.arcade.collide(this.humans, this.humans);
 
@@ -115,7 +116,7 @@ export default class Gameplay extends _State {
 
     if (aliveHumans.length <= 0) {
       if (savedHumans.length > 0) {
-        this.endGame(`You saved ${savedHumans.length} humans`);
+        this.nextLevel();
       } else {
         this.endGame(`There were no survivors`);
       }

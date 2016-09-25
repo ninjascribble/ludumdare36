@@ -7,6 +7,7 @@ const LEVELS = {
 
 export default class LevelManager{
   constructor(game, humans, enemies, bricks){
+    this.currentLevel = 0;
     this.humans = humans;
     this.enemies = enemies;
     this.game = game;
@@ -27,6 +28,11 @@ export default class LevelManager{
     else {
       return false;
     }
+  }
+
+  next () {
+    this.currentLevel++;
+    return this.load(this.currentLevel);
   }
 
   buildHumans (positions) {

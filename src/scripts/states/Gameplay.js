@@ -25,6 +25,12 @@ export default class Gameplay extends _State {
     this.enemy4 = Actors.alien(this.game, WIDTH / 4, 32, this.enemies);
     this.enemy5 = Actors.alien(this.game, WIDTH * 3 / 4, 32, this.enemies);
 
+    this.humans = this.game.add.group();
+    this.human1 = Actors.human(this.game, WIDTH - 32, HEIGHT - 64, this.humans);
+    this.human2 = Actors.human(this.game, WIDTH / 2, HEIGHT - 64, this.humans);
+    this.human3 = Actors.human(this.game, 32, HEIGHT - 64, this.humans);
+
+
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
 
@@ -77,6 +83,9 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.enemies);
+    this.game.physics.arcade.collide(this.humans, this.bricks);
+    this.game.physics.arcade.collide(this.humans, this.player.bricks);
+    this.game.physics.arcade.collide(this.humans, this.enemies);
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.moveLeft();

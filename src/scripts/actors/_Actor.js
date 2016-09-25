@@ -59,4 +59,29 @@ export default class Actor {
   moveDown () {
     this.move(0, 16, DOWN, 'walkDown');
   }
+
+  moveTimer(){
+    var moveDelay = this.game.time.create();
+    moveDelay.loop(2000, this.travel, this);
+    //moveDelay.add(2000/*1175*/, this.travel, this);
+    moveDelay.start();
+    //console.log(moveDelay.next);
+  }
+
+  travel(){
+    var dirNum = this.game.rnd.integerInRange(1, 4);
+
+    switch(dirNum){
+      case 1: this.moveLeft();
+        break;
+      case 2: this.moveRight();
+        break;
+      case 3: this.moveUp();
+        break;
+      case 4: this.moveDown();
+        break;
+      default:
+        break;
+      }
+  }
 }

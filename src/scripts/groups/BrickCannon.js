@@ -20,6 +20,7 @@ export default class BrickCannon extends Phaser.Group {
   }
 
   fireBrick (x, y, vx, vy) {
+    this.game.sound.play('throwBrick');
     let brick = this.createBrick(x, y);
     brick.body.velocity.setTo(vx, vy);
   }

@@ -1,6 +1,7 @@
 import _State from './_State';
 import Fonts from '../fonts';
 import Sprites from '../sprites';
+import Sounds from '../sounds';
 
 export default class Loading extends _State {
   init () {
@@ -24,11 +25,12 @@ export default class Loading extends _State {
   preload () {
     Fonts.loadResources(this);
     Sprites.loadResources(this);
+    Sounds.loadResources(this);
   }
 
   // create() is automagically triggerd after preload completes
   create () {
-    //this.stateProvider.menu(this.state);
-    this.stateProvider.gameplay(this.state);
+    this.stateProvider.menu(this.state);
+    // this.stateProvider.gameplay(this.state);
   }
 }

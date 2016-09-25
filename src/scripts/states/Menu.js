@@ -1,5 +1,6 @@
 import _State from './_State';
 import Fonts from '../fonts';
+import Sounds from '../sounds';
 
 export default class Menu extends _State {
   create () {
@@ -8,6 +9,9 @@ export default class Menu extends _State {
     this.time.events.loop(400, () => {
       this.actionText.visible = Boolean(!this.actionText.visible);
     });
+
+    this.song = this.game.add.audio('menuSong', 1, true);
+    this.song.play();
   }
 
   createTitleText (x, y) {
@@ -20,6 +24,7 @@ export default class Menu extends _State {
 
   update () {
     if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+      this.song.stop();
       this.stateProvider.gameplay(this.state);
     }
   }

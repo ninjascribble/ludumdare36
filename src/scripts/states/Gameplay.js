@@ -10,18 +10,20 @@ const WIDTH = 320;
 const HEIGHT = 256;
 const OFFSET_X = 0;
 const OFFSET_Y = 0;
-let checkBounds;
 
 export default class Gameplay extends _State {
   create () {
+    this.allowUpdates = true;
     this.world.setBounds(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT);
+    this.song = this.game.add.audio('menuSong', 1, true);
+    this.song.play('', 0, 0.5);
 
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
 
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
-    
+
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.bricks, this.world);
 
@@ -34,7 +36,7 @@ export default class Gameplay extends _State {
     this.levels.load(0);
 
 
-
+    this.player.bricksLeft = 20;
     this.timeRemaining = 20;
     this.hud.time(this.timeRemaining);
     this.timer = this.game.time.create();
@@ -52,18 +54,14 @@ export default class Gameplay extends _State {
       this.humans.forEachAlive((human) => {
         var promises = [];
 
-        this.enemies.forEach((enemy) => {
+        this.enemies.forEachAlive((enemy) => {
           promises.push(new Promise((resolve) => {
             this.pathfinding.findPath(enemy, human, resolve);
           }));
         });
 
         Promise.all(promises).then((results) => {
-          let done = true;
-          results.forEach((result) => {
-            done = done && !result;
-          });
-          if (done) {
+          if (results.every((result) => !result)) {
             human.actor.save();
             this.player.points += 200;
             this.player.points += this.pathfinding.countContiguousTiles(human);
@@ -73,11 +71,14 @@ export default class Gameplay extends _State {
     });
   }
 
-
   endGame (reason) {
-    this.stateProvider.gameover(this.state, {
-      score: this.player.points,
-      reason: reason
+    this.allowUpdates = false;
+    this.game.time.events.add(750, () => {
+      this.song.stop();
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: reason
+      });
     });
   }
 
@@ -88,22 +89,28 @@ export default class Gameplay extends _State {
   }
 
   onPlayerEnemiesCollide (player, enemy) {
+    this.game.sound.play('alienAttack');
     player.actor.kill();
   }
 
   onHumansEnemiesCollide (human, enemy) {
+    this.game.sound.play('alienAttack');
     human.actor.kill();
   }
 
   update () {
+    if (this.allowUpdates == false) {
+      return;
+    }
+
     this.game.physics.arcade.collide(this.bricks, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
-    this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide);
+    this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide, null, this);
     this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
-    this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide);
+    this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide, null, this);
     this.game.physics.arcade.collide(this.humans, this.humans);
 
     let aliveHumans = this.humans.filter((human) => {
@@ -151,38 +158,27 @@ export default class Gameplay extends _State {
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-      checkBounds = new Phaser.Rectangle(this.player.sprite.x + 1, this.player.sprite.y + 1, this.player.sprite.width - 2, this.player.sprite.height - 2);
-
+      var rect = new Phaser.Rectangle(this.player.sprite.x + 1, this.player.sprite.y + 1, this.player.sprite.width - 2, this.player.sprite.height - 2);
+      var gameObjs = this.bricks.children.concat(this.enemies.children, this.humans.children);
 
       switch (this.player.facing) {
         case 'up':
-          checkBounds.y -= this.player.sprite.width;
+          rect.y -= this.player.sprite.width;
           break;
         case 'down':
-          checkBounds.y += this.player.sprite.width;
+          rect.y += this.player.sprite.width;
           break;
         case 'left':
-          checkBounds.x -= this.player.sprite.height;
+          rect.x -= this.player.sprite.height;
           break;
         case 'right':
-          checkBounds.x += this.player.sprite.height;
+          rect.x += this.player.sprite.height;
           break;
       }
 
-      const gameObjs = this.player.bricks.children.concat(this.bricks.children, this.enemies.children, this.humans.children);
-      let obstructed = false;
-      gameObjs.forEach((obj) => {
-        const rect = new Phaser.Rectangle(obj.body.x, obj.body.y, obj.body.width, obj.body.height);
-        if (rect.intersects(checkBounds)) {
-          obstructed = true;
-        }
-      });
-
-      if (obstructed) {
-        return;
+      if (gameObjs.every((obj) => rect.intersects(obj.body) == false)) {
+        this.player.throwBrick();
       }
-
-      this.player.throwBrick();
     }
   }
 }

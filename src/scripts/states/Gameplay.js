@@ -29,6 +29,10 @@ export default class Gameplay extends _State {
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
+    this.player.onNoBricksLeft.addOnce(() => {
+      this.stateProvider.gameover(this.state, { score: this.player.points });
+    })
+
     this.buildBoundryWalls();
 
     this.pathfinding = services.pathfinding();
@@ -48,8 +52,8 @@ export default class Gameplay extends _State {
           done = done && !result;
         });
         if (done) {
-          let score = this.pathfinding.countContiguousTiles(this.player.sprite);
-          this.stateProvider.gameover(this.state, { score });
+          this.player.points += this.pathfinding.countContiguousTiles(this.player.sprite);
+          this.stateProvider.gameover(this.state, { score: this.player.points });
         }
       });
     });

@@ -4,6 +4,7 @@ import Fonts from '../fonts';
 import Groups from '../groups';
 import Sprites from '../sprites';
 import services from '../services';
+import levels from '../levels';
 
 const WIDTH = 320;
 const HEIGHT = 256;
@@ -21,20 +22,9 @@ export default class Gameplay extends _State {
     this.game.add.existing(this.bricks);
 
     this.enemies = this.game.add.group();
-
-
     this.humans = this.game.add.group();
-    this.human1 = Actors.human(this.game, WIDTH - 32, HEIGHT - 64, this.humans);
-    this.human2 = Actors.human(this.game, WIDTH / 2, HEIGHT - 64, this.humans);
-    this.human3 = Actors.human(this.game, 32, HEIGHT - 64, this.humans);
-
-
-
-    this.enemy1 = Actors.alien(this.game, WIDTH / 2, 32, this.enemies);
-    this.enemy2 = Actors.alien(this.game, 16, 32, this.enemies);
-    this.enemy3 = Actors.alien(this.game, WIDTH - 32, 32, this.enemies);
-    this.enemy4 = Actors.alien(this.game, WIDTH / 4, 64, this.enemies);
-    this.enemy5 = Actors.alien(this.game, WIDTH * 3 / 4, 64, this.enemies);
+    this.levels = levels.create(this.game, this.humans, this.enemies);
+    this.levels.levelTwo();
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);

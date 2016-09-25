@@ -1,11 +1,11 @@
 import _PhysicsSprite from './_PhysicsSprite';
 
-const KEY = 'mexican';
-const SRC = 'assets/mexican.png';
+const KEY = 'alien';
+const SRC = 'assets/alien.png';
 const WIDTH = 16;
 const HEIGHT = 16;
 
-export default class MexicanSprite extends _PhysicsSprite {
+export default class AlienSprite extends _PhysicsSprite {
   static loadResource (loader) {
     loader.load.spritesheet(KEY, SRC, WIDTH, HEIGHT);
   }

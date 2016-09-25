@@ -1,6 +1,6 @@
+import Alien from './Alien';
 import Groups from '../groups';
 import Player from './Player';
-import Mexican from './Mexican';
 import Sprites from '../sprites';
 
 module.exports = {
@@ -17,9 +17,9 @@ module.exports = {
     return actor;
   },
 
-  mexican: function mexican (game, x, y, group = null) {
-    var sprite = Sprites.mexican(game, x, y);
-    var actor = new Mexican(game, sprite);
+  alien: function alien (game, x, y, group = null) {
+    var sprite = Sprites.alien(game, x, y);
+    var actor = new Alien(game, sprite);
 
     if (group) {
       group.add(sprite);

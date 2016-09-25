@@ -19,11 +19,11 @@ export default class Gameplay extends _State {
     this.game.add.existing(this.bricks);
 
     this.enemies = this.game.add.group();
-    this.enemy1 = Actors.mexican(this.game, WIDTH / 2, 16, this.enemies);
-    this.enemy2 = Actors.mexican(this.game, 16, 16, this.enemies);
-    this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.enemies);
-    this.enemy4 = Actors.mexican(this.game, WIDTH / 4, 32, this.enemies);
-    this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.enemies);
+    this.enemy1 = Actors.alien(this.game, WIDTH / 2, 16, this.enemies);
+    this.enemy2 = Actors.alien(this.game, 16, 16, this.enemies);
+    this.enemy3 = Actors.alien(this.game, WIDTH - 32, 16, this.enemies);
+    this.enemy4 = Actors.alien(this.game, WIDTH / 4, 32, this.enemies);
+    this.enemy5 = Actors.alien(this.game, WIDTH * 3 / 4, 32, this.enemies);
 
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();

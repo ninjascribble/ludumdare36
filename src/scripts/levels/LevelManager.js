@@ -35,13 +35,13 @@ export default class LevelManager{
     return this.load(this.currentLevel);
   }
 
-  buildHumans (positions) {
+  buildHumans (positions = []) {
     positions.forEach((human) => {
       Actors.human(this.game, human.x, human.y, this.humans);
     });
   }
 
-  buildEnemies (positions) {
+  buildEnemies (positions = []) {
     positions.forEach((enemy) => {
       Actors.alien(this.game, enemy.x, enemy.y, this.enemies);
     });

@@ -25,6 +25,8 @@ module.exports = {
       group.add(sprite);
     }
 
+    actor.moveTimer()
+
     return actor;
   }
 };

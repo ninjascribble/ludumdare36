@@ -27,19 +27,19 @@ export default class Player extends _Actor {
 
     switch (this.facing) {
       case 'up':
-        y -= this.sprite.width;
+        y -= this.sprite.width + 1;
         vy = -1 * THROW_BRICK_VELOCITY;
         break;
       case 'down':
-        y += this.sprite.width;
+        y += this.sprite.width + 1;
         vy = 1 * THROW_BRICK_VELOCITY;
         break;
       case 'left':
-        x -= this.sprite.height;
+        x -= this.sprite.height + 1;
         vx = -1 * THROW_BRICK_VELOCITY;
         break;
       case 'right':
-        x += this.sprite.height;
+        x += this.sprite.height + 1;
         vx = 1 * THROW_BRICK_VELOCITY;
         break;
     }

@@ -39,7 +39,10 @@ export default class Gameplay extends _State {
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
     this.player.onNoBricksLeft.addOnce(() => {
-      this.stateProvider.gameover(this.state, { score: this.player.points });
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: 'You ran out of bricks'
+      });
     })
 
     this.buildBoundryWalls();
@@ -47,25 +50,27 @@ export default class Gameplay extends _State {
     this.pathfinding = services.pathfinding();
     this.player.bricks.onBrickDone.add(() => {
       this.pathfinding.calculateGrid([this.bricks, this.player.bricks], { width: WIDTH, height: HEIGHT }, { width: 16, height: 16 });
-      const promises = [];
 
-      this.enemies.forEach((enemy) => {
-        promises.push(new Promise((resolve) => {
-          this.pathfinding.findPath(enemy, this.player.sprite, resolve);
-        }));
-      });
+      this.humans.forEachAlive((human) => {
+        var promises = [];
 
-      Promise.all(promises).then((results) => {
-        let done = true;
-        results.forEach((result) => {
-          done = done && !result;
+        this.enemies.forEach((enemy) => {
+          promises.push(new Promise((resolve) => {
+            this.pathfinding.findPath(enemy, human, resolve);
+          }));
         });
-        if (done) {
-          this.game.time.events.add(1000, () => {
-            this.player.points += this.pathfinding.countContiguousTiles(this.player.sprite);
-            this.stateProvider.gameover(this.state, { score: this.player.points });
+
+        Promise.all(promises).then((results) => {
+          let done = true;
+          results.forEach((result) => {
+            done = done && !result;
           });
-        }
+          if (done) {
+            human.actor.save();
+            this.player.points += 200;
+            this.player.points += this.pathfinding.countContiguousTiles(human);
+          }
+        });
       });
     });
   }
@@ -87,6 +92,10 @@ export default class Gameplay extends _State {
     }
   }
 
+  onHumansEnemiesCollide (human, enemy) {
+    human.actor.kill();
+  }
+
   update () {
     this.game.physics.arcade.collide(this.player.bricks, this.bricks);
     this.game.physics.arcade.collide(this.player.bricks, this.player.bricks);
@@ -99,8 +108,30 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
     this.game.physics.arcade.collide(this.humans, this.player.bricks);
-    this.game.physics.arcade.collide(this.humans, this.enemies);
+    this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide);
     this.game.physics.arcade.collide(this.humans, this.humans);
+
+    let aliveHumans = this.humans.filter((human) => {
+      return human.alive;
+    }).list;
+
+    let savedHumans = this.humans.filter((human) => {
+      return human.saved;
+    }).list;
+
+    if (aliveHumans.length <= 0) {
+      if (savedHumans.length > 0) {
+        this.stateProvider.gameover(this.state, {
+          score: this.player.points,
+          reason: `You saved ${savedHumans.length} humans`
+        });
+      } else {
+        this.stateProvider.gameover(this.state, {
+          score: this.player.points,
+          reason: `There were no survivors`
+        });
+      }
+    }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
       this.player.moveLeft();

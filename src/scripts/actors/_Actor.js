@@ -8,12 +8,18 @@ export default class Actor {
   constructor (game, sprite) {
     this.game = game;
     this.sprite = sprite;
+    this.sprite.actor = this;
+
     this.canMove = true;
     this.isAlive = true;
     this.facing = DOWN;
 
     this.sprite.body.onMoveComplete.add(() => this.canMove = true);
     this.sprite.body.onCollide.add(() => this.canMove = true);
+  }
+
+  kill () {
+    this.sprite.kill();
   }
 
   move (x, y, facing, animation) {

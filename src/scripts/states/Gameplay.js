@@ -30,9 +30,6 @@ export default class Gameplay extends _State {
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.world);
-    this.player.onNoBricksLeft.addOnce(() => {
-      this.stateProvider.gameover(this.state, { score: this.player.points });
-    });
 
     this.timeRemaining = 20;
     this.hud.time(this.timeRemaining);
@@ -90,6 +87,13 @@ export default class Gameplay extends _State {
     }
   }
 
+  endGame (reason) {
+    this.stateProvider.gameover(this.state, {
+      score: this.player.points,
+      reason: reason
+    });
+  }
+
   onPlayerEnemiesCollide (player, enemy) {
     player.actor.kill();
   }
@@ -121,41 +125,24 @@ export default class Gameplay extends _State {
       return human.saved;
     }).list;
 
-    let bricksRemaining = this.player.bricksLeft;
-
     if (this.player.isAlive == false) {
-      this.stateProvider.gameover(this.state, {
-        score: this.player.points,
-        reason: `You were killed by the aliens`
-      });
+      this.endGame(`You were killed by the aliens`);
     }
 
     if (aliveHumans.length <= 0) {
       if (savedHumans.length > 0) {
-        this.stateProvider.gameover(this.state, {
-          score: this.player.points,
-          reason: `You saved ${savedHumans.length} humans`
-        });
+        this.endGame(`You saved ${savedHumans.length} humans`);
       } else {
-        this.stateProvider.gameover(this.state, {
-          score: this.player.points,
-          reason: `There were no survivors`
-        });
+        this.endGame(`There were no survivors`);
       }
     }
 
-    if (bricksRemaining < 0) {
-      this.stateProvider.gameover(this.state, {
-        score: this.player.points,
-        reason: 'You ran out of bricks'
-      });
+    if (this.player.bricksLeft <= 0) {
+      this.endGame('You ran out of bricks');
     }
 
     if (this.timeRemaining <= 0) {
-      this.stateProvider.gameover(this.state, {
-        score: this.player.points,
-        reason: 'You ran out of time'
-      });
+      this.endGame('You ran out of time');
     }
 
     if (this.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {

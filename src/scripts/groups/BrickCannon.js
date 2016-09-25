@@ -3,19 +3,19 @@ import Sprites from '../sprites';
 export default class BrickCannon extends Phaser.Group {
   constructor (game) {
     super(game, null, 'brickCannon');
-    this.direction = {
-      up: { x: 0, y: -150 },
-      down: { x: 0, y: 150 },
-      left: { x: -150, y: 0 },
-      right: { x: 150, y: 0 }
-    };
   }
 
-  fireBrick (from, direction) {
-    let brick = Sprites.brick(this.game, from.x, from.y);
-    this.add(brick);
-    // brick.body.collideWorldBounds = true;
+  createBrick (x, y) {
+    return this.add(Sprites.brick(this.game, x, y));
+  }
 
-    brick.body.velocity.setTo(direction.x, direction.y);
+  placeBrick (x, y) {
+    let brick = this.createBrick(x, y)
+    brick.body.immovable = true;
+  }
+
+  fireBrick (x, y, vx, vy) {
+    let brick = this.createBrick(x, y)
+    brick.body.velocity.setTo(vx, vy);
   }
 }

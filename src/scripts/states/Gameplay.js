@@ -13,6 +13,7 @@ const OFFSET_Y = 0;
 
 export default class Gameplay extends _State {
   create () {
+    this.allowUpdates = true;
     this.world.setBounds(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT);
     this.song = this.game.add.audio('menuSong', 1, true);
     this.song.play('', 0, 0.5);
@@ -22,7 +23,7 @@ export default class Gameplay extends _State {
 
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
-    
+
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.hud, this.bricks, this.world);
 
@@ -35,8 +36,8 @@ export default class Gameplay extends _State {
     this.levels.load(0);
 
 
-
-    this.timeRemaining = 20;
+    this.player.bricksLeft = 100;
+    this.timeRemaining = 60;
     this.hud.time(this.timeRemaining);
     this.timer = this.game.time.create();
     this.timer.repeat(1000, this.timeRemaining, () => {
@@ -71,6 +72,7 @@ export default class Gameplay extends _State {
   }
 
   endGame (reason) {
+    this.allowUpdates = false;
     this.game.time.events.add(750, () => {
       this.song.stop();
       this.stateProvider.gameover(this.state, {
@@ -97,6 +99,10 @@ export default class Gameplay extends _State {
   }
 
   update () {
+    if (this.allowUpdates == false) {
+      return;
+    }
+
     this.game.physics.arcade.collide(this.bricks, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);

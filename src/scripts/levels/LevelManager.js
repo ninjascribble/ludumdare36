@@ -16,11 +16,10 @@ export default class LevelManager{
   }
 
   load (index) {
-    this.humans.removeAll();
-    this.enemies.removeAll();
-    this.bricks.removeAll();
-
     if (LEVELS[index]) {
+      this.humans.removeAll();
+      this.enemies.removeAll();
+      this.bricks.removeAll();
       this.buildHumans(LEVELS[index].humans)
       this.buildEnemies(LEVELS[index].enemies)
       this.buildBoundryWalls();

@@ -45,6 +45,7 @@ export default class Gameplay extends _State {
   update () {
     this.game.physics.arcade.collide(this.player.bricks, this.player.bricks);
     this.game.physics.arcade.collide(this.enemies,       this.player.bricks);
+    this.game.physics.arcade.collide(this.enemies,       this.enemies);
     this.game.physics.arcade.collide(this.player.sprite, this.player.bricks);
     this.game.physics.arcade.collide(this.player.sprite, this.enemies);
 

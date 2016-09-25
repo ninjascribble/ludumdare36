@@ -6,19 +6,22 @@ const LEVELS = {
 }
 
 export default class LevelManager{
-  constructor(game, humans, enemies){
+  constructor(game, humans, enemies, bricks){
     this.humans = humans;
     this.enemies = enemies;
     this.game = game;
+    this.bricks = bricks;
   }
 
   load (index) {
     this.humans.removeAll();
     this.enemies.removeAll();
+    this.bricks.removeAll();
 
     if (LEVELS[index]) {
       this.buildHumans(LEVELS[index].humans)
       this.buildEnemies(LEVELS[index].enemies)
+      this.buildBoundryWalls();
       return true;
     }
     else {
@@ -37,4 +40,22 @@ export default class LevelManager{
       Actors.alien(this.game, enemy.x, enemy.y, this.enemies);
     });
   }
+
+  buildBoundryWalls () {
+    let x = 0;
+    let y = 0;
+
+    while (x < 320) {
+      this.bricks.placeBrick(x, 16);
+      this.bricks.placeBrick(x, 240);
+      x += 16;
+    }
+
+    while (y < 256) {
+      this.bricks.placeBrick(0, y);
+      this.bricks.placeBrick(304, y);
+      y += 16;
+    }
+  }
+
 }

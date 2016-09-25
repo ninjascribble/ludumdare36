@@ -25,7 +25,7 @@ export default class Gameplay extends _State {
     this.enemies = this.game.add.group();
     this.humans = this.game.add.group();
 
-    this.levels = levels.create(this.game, this.humans, this.enemies);
+    this.levels = levels.create(this.game, this.humans, this.enemies, this.bricks);
     this.levels.load(0);
 
     this.hud = Groups.hud(this.game, 0, 0, WIDTH, 16, this.world);
@@ -43,7 +43,6 @@ export default class Gameplay extends _State {
     });
     this.timer.start();
 
-    this.buildBoundryWalls();
 
     this.pathfinding = services.pathfinding();
     this.player.bricks.onBrickDone.add(() => {
@@ -71,23 +70,6 @@ export default class Gameplay extends _State {
         });
       });
     });
-  }
-
-  buildBoundryWalls () {
-    let x = 0;
-    let y = 0;
-
-    while (x < WIDTH) {
-      this.bricks.placeBrick(x, 16);
-      this.bricks.placeBrick(x, HEIGHT - 16);
-      x += 16;
-    }
-
-    while (y < HEIGHT) {
-      this.bricks.placeBrick(0, y);
-      this.bricks.placeBrick(WIDTH - 16, y);
-      y += 16;
-    }
   }
 
   onPlayerEnemiesCollide (player, enemy) {

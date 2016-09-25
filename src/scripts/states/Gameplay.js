@@ -17,10 +17,24 @@ export default class Gameplay extends _State {
     this.bricks = Groups.brickCannon(this.game);
     this.game.add.existing(this.bricks);
 
-    this.mexican = Actors.mexican(this.game, WIDTH/2, 16, this.world);
-    this.mexican.moveTimer();
+    this.spawnEnemies();
+
     this.player = Actors.player(this.game, this.world.centerX, this.world.centerY, this.world);
     this.buildBoundryWalls();
+  }
+
+  spawnEnemies(){
+    this.enemy1 = Actors.mexican(this.game, WIDTH/2, 16, this.world);
+    this.enemy2 = Actors.mexican(this.game, 16, 16, this.world);
+    this.enemy3 = Actors.mexican(this.game, WIDTH - 32, 16, this.world);
+    this.enemy4 = Actors.mexican(this.game, WIDTH/4, 32, this.world);
+    this.enemy5 = Actors.mexican(this.game, WIDTH * 3 / 4, 32, this.world);
+
+    this.enemy1.moveTimer();
+    this.enemy2.moveTimer();
+    this.enemy3.moveTimer();
+    this.enemy4.moveTimer();
+    this.enemy5.moveTimer();
   }
 
   buildBoundryWalls () {

@@ -14,8 +14,6 @@ export default class Mexican extends _Actor {
   }
 
   travel(){
-    console.log('travel Log');
-
     var dirNum = this.game.rnd.integerInRange(1, 4);
 
     switch(dirNum){

@@ -36,8 +36,8 @@ export default class Gameplay extends _State {
     this.levels.load(0);
 
 
-    this.player.bricksLeft = 100;
-    this.timeRemaining = 60;
+    this.player.bricksLeft = 20;
+    this.timeRemaining = 20;
     this.hud.time(this.timeRemaining);
     this.timer = this.game.time.create();
     this.timer.repeat(1000, this.timeRemaining, () => {

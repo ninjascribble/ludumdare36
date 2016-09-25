@@ -15,6 +15,9 @@ export default class GameOver extends _State {
     this.time.events.loop(400, () => {
       this.actionText.visible = Boolean(!this.actionText.visible);
     });
+
+    this.song = this.game.add.audio('gameOverSong', 1, true);
+    this.song.play();
   }
 
   createTitleText (x, y) {
@@ -35,6 +38,7 @@ export default class GameOver extends _State {
 
   update () {
     if (this.input.keyboard.isDown(Phaser.Keyboard.S)) {
+      this.song.stop();
       this.stateProvider.gameplay(this.state);
     }
   }

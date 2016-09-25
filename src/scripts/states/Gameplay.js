@@ -15,6 +15,8 @@ let checkBounds;
 export default class Gameplay extends _State {
   create () {
     this.world.setBounds(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT);
+    this.song = this.game.add.audio('menuSong', 1, true);
+    this.song.play('', 0, 0.5);
 
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
@@ -75,9 +77,12 @@ export default class Gameplay extends _State {
 
 
   endGame (reason) {
-    this.stateProvider.gameover(this.state, {
-      score: this.player.points,
-      reason: reason
+    this.game.time.events.add(750, () => {
+      this.song.stop();
+      this.stateProvider.gameover(this.state, {
+        score: this.player.points,
+        reason: reason
+      });
     });
   }
 
@@ -88,10 +93,12 @@ export default class Gameplay extends _State {
   }
 
   onPlayerEnemiesCollide (player, enemy) {
+    this.game.sound.play('alienAttack');
     player.actor.kill();
   }
 
   onHumansEnemiesCollide (human, enemy) {
+    this.game.sound.play('alienAttack');
     human.actor.kill();
   }
 
@@ -100,10 +107,10 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.enemies, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);
     this.game.physics.arcade.collide(this.player.sprite, this.bricks);
-    this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide);
+    this.game.physics.arcade.collide(this.player.sprite, this.enemies, this.onPlayerEnemiesCollide, null, this);
     this.game.physics.arcade.collide(this.player.sprite, this.humans);
     this.game.physics.arcade.collide(this.humans, this.bricks);
-    this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide);
+    this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide, null, this);
     this.game.physics.arcade.collide(this.humans, this.humans);
 
     let aliveHumans = this.humans.filter((human) => {

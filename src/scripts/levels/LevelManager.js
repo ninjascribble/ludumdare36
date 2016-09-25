@@ -37,6 +37,10 @@ export default class LevelManager{
     return this.load(this.currentLevel);
   }
 
+  hasNext () {
+    return Boolean(LEVELS[this.currentLevel + 1]);
+  }
+
   buildHumans (positions = []) {
     positions.forEach((human) => {
       Actors.human(this.game, human.x, human.y, this.humans);

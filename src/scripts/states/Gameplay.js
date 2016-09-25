@@ -83,8 +83,13 @@ export default class Gameplay extends _State {
   }
 
   nextLevel () {
-    if (!this.levels.next()) {
+    if (this.levels.hasNext() == false) {
       this.endGame('You saved the world!');
+    }
+    else {
+      this.game.time.events.add(750, () => {
+        this.levels.next();
+      });
     }
   }
 
@@ -99,10 +104,6 @@ export default class Gameplay extends _State {
   }
 
   update () {
-    if (this.allowUpdates == false) {
-      return;
-    }
-
     this.game.physics.arcade.collide(this.bricks, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);
@@ -112,6 +113,10 @@ export default class Gameplay extends _State {
     this.game.physics.arcade.collide(this.humans, this.bricks);
     this.game.physics.arcade.collide(this.humans, this.enemies, this.onHumansEnemiesCollide, null, this);
     this.game.physics.arcade.collide(this.humans, this.humans);
+
+    if (this.allowUpdates == false) {
+      return;
+    }
 
     let aliveHumans = this.humans.filter((human) => {
       return human.alive;

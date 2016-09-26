@@ -4,7 +4,7 @@ let easystar = new Easystar.js();
 let mapData = [];
 
 function pointToTile (point) {
-  return new Phaser.Point(Phaser.Math.snapTo(point.x , 16) / 16, Phaser.Math.snapTo(point.y, 16) / 16);
+  return new Phaser.Point(Phaser.Math.snapTo(point.x, 16) / 16, Phaser.Math.snapTo(point.y, 16) / 16);
 }
 
 function tileToPoint (point) {
@@ -39,7 +39,7 @@ export default {
       }
     }
 
-    for (var i = 0; i < mapData.length; i++) {
+    for (let i = 0; i < mapData.length; i++) {
       visitedTiles[i] = [];
     }
 
@@ -76,8 +76,8 @@ export default {
 
     console.log('calculating grid');
 
-    for (var i = 0; i < gridHeight; i++) {
-      for (var j = 0; j < gridWidth; j++) {
+    for (let i = 0; i < gridHeight; i++) {
+      for (let j = 0; j < gridWidth; j++) {
         if (!mapData[i]) {
           mapData[i] = [];
         }

@@ -6,6 +6,7 @@ import Sprites from '../sprites';
 import services from '../services';
 import Timers from '../timers';
 import levels from '../levels';
+import Sounds from '../sounds';
 
 const WIDTH = 320;
 const HEIGHT = 256;
@@ -16,8 +17,7 @@ export default class Gameplay extends _State {
   create () {
     this.allowUpdates = true;
     this.world.setBounds(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT);
-    this.song = this.game.add.audio('menuSong', 1, true);
-    this.song.play('', 0, 0.5);
+    Sounds.playMusic('menuSong', 0.5);
 
     this.background = Sprites.checkerboard(this.game, 0, 0, this.world.width, this.world.height);
     this.game.add.existing(this.background);
@@ -78,7 +78,7 @@ export default class Gameplay extends _State {
     this.timer.stop();
     this.pause();
     this.game.time.events.add(750, () => {
-      this.song.stop();
+      Sounds.stopMusic();
       this.stateProvider.gameover(this.state, {
         score: this.player.points,
         reason: reason

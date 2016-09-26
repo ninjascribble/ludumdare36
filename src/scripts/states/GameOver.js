@@ -1,5 +1,6 @@
 import _State from './_State';
 import Fonts from '../fonts';
+import Sounds from '../sounds';
 
 export default class GameOver extends _State {
   init (params) {
@@ -16,8 +17,7 @@ export default class GameOver extends _State {
       this.actionText.visible = Boolean(!this.actionText.visible);
     });
 
-    this.song = this.game.add.audio('gameOverSong', 1, true);
-    this.song.play();
+    Sounds.playMusic('gameOverSong', 1);
   }
 
   createTitleText (x, y) {
@@ -38,7 +38,7 @@ export default class GameOver extends _State {
 
   update () {
     if (this.input.keyboard.isDown(Phaser.Keyboard.S)) {
-      this.song.stop();
+      Sounds.stopMusic();
       this.stateProvider.gameplay(this.state);
     }
   }

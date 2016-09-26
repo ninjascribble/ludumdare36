@@ -26,11 +26,14 @@ export default class Loading extends _State {
     Fonts.loadResources(this);
     Sprites.loadResources(this);
     Sounds.loadResources(this);
+    this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
+  }
+
+  onLoadComplete () {
+    this.stateProvider.menu(this.state);
   }
 
   // create() is automagically triggerd after preload completes
   create () {
-    this.stateProvider.menu(this.state);
-    // this.stateProvider.gameplay(this.state);
   }
 }

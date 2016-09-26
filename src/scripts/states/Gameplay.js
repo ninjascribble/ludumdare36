@@ -4,6 +4,7 @@ import Fonts from '../fonts';
 import Groups from '../groups';
 import Sprites from '../sprites';
 import services from '../services';
+import Timers from '../timers';
 import levels from '../levels';
 
 const WIDTH = 320;
@@ -37,15 +38,9 @@ export default class Gameplay extends _State {
 
 
     this.player.bricksLeft = 20;
-    this.timeRemaining = 20;
-    this.hud.time(this.timeRemaining);
-    this.timer = this.game.time.create();
-    this.timer.repeat(1000, this.timeRemaining, () => {
-      this.timeRemaining--;
-      this.hud.time(this.timeRemaining);
-    });
-    this.timer.start();
 
+    this.timer = Timers.countdown(this.game, 20);
+    this.timer.start();
 
     this.pathfinding = services.pathfinding();
     this.bricks.onBrickDone.add(() => {
@@ -71,8 +66,17 @@ export default class Gameplay extends _State {
     });
   }
 
-  endGame (reason) {
+  pause () {
     this.allowUpdates = false;
+  }
+
+  resume () {
+    this.allowUpdates = true;
+  }
+
+  endGame (reason) {
+    this.timer.stop();
+    this.pause();
     this.game.time.events.add(750, () => {
       this.song.stop();
       this.stateProvider.gameover(this.state, {
@@ -87,8 +91,12 @@ export default class Gameplay extends _State {
       this.endGame('You saved the world!');
     }
     else {
+      this.pause();
       this.game.time.events.add(750, () => {
         this.levels.next();
+        this.timer.addTime(20);
+        this.player.bricksLeft += 20;
+        this.resume();
       });
     }
   }
@@ -104,6 +112,8 @@ export default class Gameplay extends _State {
   }
 
   update () {
+    this.hud.time(this.timer.time);
+
     this.game.physics.arcade.collide(this.bricks, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.bricks);
     this.game.physics.arcade.collide(this.enemies, this.enemies);
@@ -142,7 +152,7 @@ export default class Gameplay extends _State {
       this.endGame('You ran out of bricks');
     }
 
-    if (this.timeRemaining <= 0) {
+    if (this.timer.time <= 0) {
       this.endGame('You ran out of time');
     }
 

@@ -87,6 +87,8 @@ export default class Gameplay extends _State {
   }
 
   nextLevel () {
+    this.game.sound.play('stageComplete');
+
     if (this.levels.hasNext() == false) {
       this.endGame('You saved the world!');
     }

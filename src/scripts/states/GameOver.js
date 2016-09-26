@@ -38,6 +38,7 @@ export default class GameOver extends _State {
 
   update () {
     if (this.input.keyboard.isDown(Phaser.Keyboard.S)) {
+      this.game.sound.play('throwBrick');
       Sounds.stopMusic();
       this.stateProvider.gameplay(this.state);
     }

@@ -10,6 +10,7 @@ export default {
     game.load.audio('brickImpact', 'assets/brick_impact.wav', true);
     game.load.audio('throwBrick', 'assets/throw_brick.wav', true);
     game.load.audio('alienAttack', 'assets/alien_attack.wav', true);
+    game.load.audio('stageComplete', 'assets/stage_complete.wav', true);
   },
 
   init: () => {
